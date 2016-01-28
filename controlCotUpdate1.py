@@ -17,8 +17,11 @@ class BuildCot():
     def createSQL(self):
         self.c.execute("DROP TABLE IF EXISTS comboCOT")
 
-        self.c.execute("CREATE TABLE comboCOT (ID INTEGER PRIMARY KEY,ID_NameKey,Dataset TEXT,Database TEXT,Name TEXT,Date,OpenInt INTEGER,RptableLong INTEGER,RptableShort INTEGER, "
-                  "NonRptableLong INTGER,NonRptableShort INTEGER, UNIQUE (Name,Date))")
+        self.c.execute("CREATE TABLE comboCOT (ID INTEGER PRIMARY KEY,ID_NameKey,"
+                       "Dataset TEXT,Database TEXT,Name TEXT,Date,OpenInt INTEGER,"
+                       "RptableLong INTEGER,RptableShort INTEGER, "
+                  "NonRptableLong INTEGER,NonRptableShort INTEGER,UNIQUE (Name,Date))")
+        # NetRptable REAL,NetNonRptable REAL
 
             # db.execute('insert into test(t1, i1) values(?,?)', ('one', 1)) ## sample for format syntax
 
