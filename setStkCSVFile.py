@@ -1,23 +1,13 @@
 
+#setStkCSVFile.py
 
-# stxSetFile1b.py
-'''Gets input from stxTK1a (specifying symbol and choice of using existing or creating new file,action selected) and
-does the following:
-                 1. Creates new CSV file or accesses existing file
-                 2. counts # of rows in file
-                 3. sends info to stxRanges2a'''
 
+"""Very basic program with no prompts or GUI:
+              1. Creates new CSV file or accesses existing file
+              2. counts # of rows in file
+"""
 import pandas.io.data as pullData
-import matplotlib.pyplot as mplchart
-from tkinter import *
-# import pandas
-####
-# import pandas as pd
-# import pandas.io.data
-# from pandas import DataFrame
-
 import datetime
-# import matplotlib.pyplot as plt
 import time
 
 #############################################################
@@ -41,11 +31,6 @@ class setCSVFile():
         # self.createCSV
 
     def createCSV(self):
-
-        # root = Tk()
-        # # dateStart = input("Enter start date (format yyyymmdd): ")
-        # # dateEnd = input("Enter end date (format yyyymmdd): ")
-        # root.mainloop()
         self.timeSeries0.to_csv('{0} ohlc.csv'.format(self.symbol))
         self.dataFile = pullData.read_csv('{0} ohlc.csv'.format(self.symbol), index_col='Date',parse_dates=True)
         return self.dataFile
@@ -67,7 +52,7 @@ class setCSVFile():
 
 #########################################################
 #########################################################
-def chooseAction(symbol,choice1a,startDate1,endDate1,actionSelected):
+def main(symbol,choice1a,startDate1,endDate1,actionSelected):
     a = setCSVFile(symbol)
 
     if choice1a == 'e' :
@@ -85,12 +70,12 @@ def chooseAction(symbol,choice1a,startDate1,endDate1,actionSelected):
 
 
     fileDays = a.countRows(csv1)
-    # stxRangesTK2.beginProgram3(csv1,actionSelected,fileDays,symbol)
 
 startDate = '20120101'
 endDate = '20160301'
-chooseAction('spy', 'n',startDate,endDate,'actionSelected')
-chooseAction('gld', 'n',startDate,endDate,'actionSelected')
-chooseAction('tlh', 'n',startDate,endDate,'actionSelected')
-chooseAction('ief', 'n',startDate,endDate,'actionSelected')
-chooseAction('uso', 'n',startDate,endDate,'actionSelected')
+
+if __name__ == '__main__': main('spy', 'n',startDate,endDate,'actionSelected')
+if __name__ == '__main__': main('gld', 'n',startDate,endDate,'actionSelected')
+if __name__ == '__main__': main('tlh', 'n',startDate,endDate,'actionSelected')
+if __name__ == '__main__': main('ief', 'n',startDate,endDate,'actionSelected')
+if __name__ == '__main__': main('uso', 'n',startDate,endDate,'actionSelected')
