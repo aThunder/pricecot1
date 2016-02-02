@@ -12,60 +12,31 @@ class spCOT():
         self.cursor.row_factory = sqlite3.Row
         self.diskEngine = create_engine('sqlite:///allCot.db')
 
-
-
-
-    def queryData(self,criteria):
-        self.criteria = criteria
-        counter = 1
-        self.netReportableList = []
-
-        # for item in self.criteria:
-        print("Criteria: ",self.criteria)
-
-        self.intoPandas1 = pd.read_sql_query("SELECT * FROM comboCOT"
-                                         " WHERE DATE > '2015-10-01' AND "
-                                             "NAME LIKE '{0}'".format(self.criteria),self.diskEngine)
-
-        # print("PandaTest1: ", (self.intoPandas1.values)[3][4])
-        # print("PandaTest2: ", self.intoPandas1[['Name','OpenInt']])
-    def calcNets(self):
-        # df['new_col'] = range(1, len(df) + 1) # format example to add new dataframe column
-
-        self.intoPandas1['NetReportable'] = self.intoPandas1['RptableLong']-self.intoPandas1['RptableShort']
-        self.intoPandas1['NetNonReportable'] = self.intoPandas1['NonRptableLong']-self.intoPandas1['NonRptableShort']
-        # print(self.intoPandas1)
-        # print("WeeklyChg: ", self.intoPandas1['NetReportable'].diff())
-
-    def updateSQLNet(self):
-        for i in self.netReportable:
-            self.cursor.execute("INSERT INTO comboCOT"
-                               "(NetRptable,NetNonRptable)"
-                                " VALUES(?,?)",
-                                (self.netReportable[counter],self.netNonReportable[counter]))
-            self.conn.commit()
-
-        # db.execute("insert into test(t1, i1) values(?,?)", ('one', 1)) ## sample for format syntax
-
     def innerJoin1(self,criteria1):
         self.criteria1 = criteria1
         self.intoPandasJoin1 = pd.read_sql_query("SELECT comboCOT.NAME,"
                                                  " comboCOT.OPENINT, "
                                                  "comboCOT.DATE,"
+                                                 " comboCOT.RptableLong,"
+                                                 " comboCOT.RptableShort,"
                                                  " SPXBONDGOLD.CLOSE,"
-                                                 " SPXBONDGOLD.VOL"
+                                                 " SPXBONDGOLD.VOL, "
+                                                 "SPXBONDGOLD.DATE "
                                                  " FROM comboCOT "
                                                  "INNER JOIN SPXBONDGOLD "
                                                  "ON comboCOT.ID_NAMEKEY =  SPXBONDGOLD.ID_NAMEKEY "
                                                  "AND comboCOT.DATE = SPXBONDGOLD.DATE "
-                                                 "WHERE comboCOT.DATE > '2016-01-01'"
-                                                 "AND NAME LIKE '{0}'".format(self.criteria1),
+                                                 "WHERE comboCOT.DATE > '2015-12-15'"
+                                                 "AND NAME LIKE '{0}'"
+                                                 "ORDER BY SPXBONDGOLD.DATE asc".format(self.criteria1),
                                                  self.diskEngine)
-        self.intoPandasJoin1['NetReportable'] = self.intoPandas1['RptableLong']-self.intoPandas1['RptableShort']
+
+        self.intoPandasJoin1['NetReportable'] = self.intoPandasJoin1['RptableLong']-self.intoPandasJoin1['RptableShort']
+        # print('NetReportable: ',self.intoPandasJoin1['NetReportable'])
+        # print('NetRptableCHG: ',self.intoPandasJoin1['NetReportable'].diff())
+        self.intoPandasJoin1['WkNetRptableChg'] = self.intoPandasJoin1['NetReportable'].diff()
 
         print("JOINED: ",self.intoPandasJoin1)
-
-
 
     def plot1(self):
         plt.plot(self.intoPandas1['NetReportable'])
@@ -80,8 +51,49 @@ def main():
     a = spCOT()
     criteria5 = ['%S&P%']#,'%Gold%','%Bond%','%Oil%']
     for i in criteria5:
-        b = a.queryData(i)
-        calcs = a.calcNets()
+        # b = a.queryData(i)
+        # calcs = a.calcNets()
         # c= a.plot1()
         d = a.innerJoin1(i)
+
 if __name__ == '__main__': main()
+
+
+
+############
+ # def updateSQLNet(self):
+    #     for i in self.netReportable:
+    #         self.cursor.execute("INSERT INTO comboCOT"
+    #                            "(NetRptable,NetNonRptable)"
+    #                             " VALUES(?,?)",
+    #                             (self.netReportable[counter],self.netNonReportable[counter]))
+    #         self.conn.commit()
+    #
+    #     # db.execute("insert into test(t1, i1) values(?,?)", ('one', 1)) ## sample for format syntax
+
+############
+# def queryData(self,criteria):
+    #     self.criteria = criteria
+    #     counter = 1
+    #     self.netReportableList = []
+    #
+    #     # for item in self.criteria:
+    #     print("Criteria: ",self.criteria)
+    #
+    #     self.intoPandas1 = pd.read_sql_query("SELECT NAME,DATE,RPTABLELONG,RPTABLESHORT FROM comboCOT"
+    #                                      " WHERE DATE > '2015-12-31' AND "
+    #                                          "NAME LIKE '{0}'"
+    #                                          " ORDER BY DATE".format(self.criteria),self.diskEngine)
+    #
+    #     # print("PandaTest1: ", (self.intoPandas1.values))
+    #     # print("PandaTest1: ", (self.intoPandas1.values)[4][5])
+    #     # print("PandaTest2: ", self.intoPandas1[['Name','OpenInt']])
+    # def calcNets(self):
+    #     # df['new_col'] = range(1, len(df) + 1) # general format example to add new dataframe column
+    #
+    #     # self.intoPandas1['NetReportable'] = self.intoPandas1['RptableLong']-self.intoPandas1['RptableShort']
+    #     # print('NetReportable: ',self.intoPandas1['NetReportable'])
+    #     # self.intoPandas1['NetNonReportable'] = self.intoPandas1['NonRptableLong']-self.intoPandas1['NonRptableShort']
+    #     # self.intoPandas1['WeeklyNetRptableChg'] = self.intoPandas1['NetReportable'].diff()
+    #     # # print(self.intoPandas1)
+    #     print("WeeklyChg: ", self.intoPandas1['NetReportable'].diff())
