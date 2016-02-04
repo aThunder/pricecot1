@@ -11,6 +11,7 @@ class spCOT():
         self.cursor = self.conn.cursor()
         self.cursor.row_factory = sqlite3.Row
         self.diskEngine = create_engine('sqlite:///allCot.db')
+        self.recentList =[]
 
     def innerJoin1(self,criteria1):
         self.criteria1 = criteria1
@@ -38,6 +39,30 @@ class spCOT():
 
         print("JOINED: ",self.intoPandasJoin1)
 
+    def mostRecent(self):
+
+        countLines = self.intoPandasJoin1['WkNetRptableChg'].count()
+        print('#Lines: ',countLines)
+        mostRecent = ("{0}: NetReportable: {1}  WeeklyChg: {2}".
+                format(self.criteria1,self.intoPandasJoin1['NetReportable'][countLines],
+                self.intoPandasJoin1['WkNetRptableChg'][countLines]))
+
+        print("MostRecent {0}: {1}".
+                format(self.criteria1,mostRecent))
+
+        self.recentList.append(mostRecent)
+
+    def summary1(self):
+        print()
+        print("MostRecentForAll: ", self.recentList)
+        print()
+
+        counter=1
+        for i in self.recentList:
+            print(counter, i)
+            counter +=1
+
+
     def plot1(self):
         plt.plot(self.intoPandas1['NetReportable'])
         plt.ylabel("Net Position")
@@ -49,12 +74,14 @@ class spCOT():
 
 def main():
     a = spCOT()
-    criteria5 = ['%S&P%']#,'%Gold%','%Bond%','%Oil%']
+    criteria5 = ['%S&P%','%Gold%','%Bond%','%Oil%']
     for i in criteria5:
         # b = a.queryData(i)
         # calcs = a.calcNets()
         # c= a.plot1()
         d = a.innerJoin1(i)
+        e= a.mostRecent()
+        f = a.summary1()
 
 if __name__ == '__main__': main()
 
