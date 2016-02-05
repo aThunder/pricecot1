@@ -20,6 +20,7 @@ class spCOT():
                                                  "comboCOT.DATE,"
                                                  " comboCOT.RptableLong,"
                                                  " comboCOT.RptableShort,"
+                                                 "SPXBONDGOLD.SYMBOL,"
                                                  " SPXBONDGOLD.CLOSE,"
                                                  " SPXBONDGOLD.VOL, "
                                                  "SPXBONDGOLD.DATE "
@@ -32,10 +33,10 @@ class spCOT():
                                                  "ORDER BY SPXBONDGOLD.DATE asc".format(self.criteria1),
                                                  self.diskEngine)
 
+        countLinesAll = self.intoPandasJoin1['Date'].count()
         self.intoPandasJoin1['NetReportable'] = self.intoPandasJoin1['RptableLong']-self.intoPandasJoin1['RptableShort']
-        # print('NetReportable: ',self.intoPandasJoin1['NetReportable'])
-        # print('NetRptableCHG: ',self.intoPandasJoin1['NetReportable'].diff())
         self.intoPandasJoin1['WkNetRptableChg'] = self.intoPandasJoin1['NetReportable'].diff()
+        self.intoPandasJoin1['WkPriceChg'] = np.round(self.intoPandasJoin1['close'].diff(),decimals=2)
 
         print("JOINED: ",self.intoPandasJoin1)
 
@@ -43,25 +44,21 @@ class spCOT():
 
         countLines = self.intoPandasJoin1['WkNetRptableChg'].count()
         print('#Lines: ',countLines)
-        mostRecent = ("{0}: NetReportable: {1}  WeeklyChg: {2}".
-                format(self.criteria1,self.intoPandasJoin1['NetReportable'][countLines],
-                self.intoPandasJoin1['WkNetRptableChg'][countLines]))
+        mostRecent = ("{0}: NetReportable: {1}  WeeklyChg: {2} WkPriceChg: {3}".
+                format(self.intoPandasJoin1['Symbol'][countLines],self.intoPandasJoin1['NetReportable'][countLines],
+                self.intoPandasJoin1['WkNetRptableChg'][countLines],self.intoPandasJoin1['WkPriceChg'][countLines]))
 
-        print("MostRecent {0}: {1}".
-                format(self.criteria1,mostRecent))
+        # print("MostRecent {0}: {1}".
+        #         format(self.criteria1,mostRecent))
 
         self.recentList.append(mostRecent)
 
     def summary1(self):
         print()
-        print("MostRecentForAll: ", self.recentList)
-        print()
-
         counter=1
         for i in self.recentList:
             print(counter, i)
             counter +=1
-
 
     def plot1(self):
         plt.plot(self.intoPandas1['NetReportable'])
@@ -76,12 +73,10 @@ def main():
     a = spCOT()
     criteria5 = ['%S&P%','%Gold%','%Bond%','%Oil%']
     for i in criteria5:
-        # b = a.queryData(i)
-        # calcs = a.calcNets()
+        a.innerJoin1(i)
+        a.mostRecent()
+        a.summary1()
         # c= a.plot1()
-        d = a.innerJoin1(i)
-        e= a.mostRecent()
-        f = a.summary1()
 
 if __name__ == '__main__': main()
 
