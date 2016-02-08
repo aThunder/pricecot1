@@ -71,7 +71,7 @@ def main(symbol,choice1a,startDate1,endDate1,actionSelected):
 
     fileDays = a.countRows(csv1)
 
-startDate = '20120101'
+startDate = '20151201'
 endDate = '20160301'
 
 if __name__ == '__main__': main('spy', 'n',startDate,endDate,'actionSelected')

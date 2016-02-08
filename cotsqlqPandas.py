@@ -75,7 +75,7 @@ def main():
     for i in criteria5:
         a.innerJoin1(i)
         a.mostRecent()
-        a.summary1()
+    a.summary1()
         # c= a.plot1()
 
 if __name__ == '__main__': main()

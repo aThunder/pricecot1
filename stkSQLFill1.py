@@ -22,7 +22,11 @@ class Csv2SQL():
 
             ### Following uses ID as only PRIMARY KEY in order to get ID to autoincrement
             self.c.execute("CREATE TABLE SPXBONDGOLD(ID INTEGER PRIMARY KEY, ID_NameKey INTEGER,Symbol CHAR,date, "
-                           "open real,high real ,low real,close real ,vol int ,adjclose real)")
+                           "open real,high real ,low real,close real ,vol int ,adjclose real,UNIQUE (Symbol,date))")
+
+            # self.c.execute("CREATE TABLE SPXBONDGOLD(ID INTEGER PRIMARY KEY, ID_NameKey INTEGER,Symbol CHAR,date, "
+            #                "open real,high real ,low real,close real ,vol int ,adjclose real)")
+
 
             # self.index1 = self.c.execute("CREATE INDEX INDEXKEY ON StxData2(date)")
             # self.index2 = self.c.execute("CREATE UNIQUE INDEX INDEXDATE ON StxData2(keynumber)")
@@ -39,11 +43,12 @@ class Csv2SQL():
                   self.c.execute("INSERT OR IGNORE INTO SPXBONDGOLD (ID_NameKey,symbol, date,"
                                  "open,high ,low ,close ,vol ,adjclose ) VALUES (?,?,?,?,?,?,?,?,?)",
                                  (self.ID_NameKey,i,row[0],row[1],row[2],row[3],row[4],row[5],row[6]))
-
+                  print("rowNumberIf: ",rowNumber)
 
                   # self.c.execute("REPLACE INTO StxData2 (keynumber, symbol, date,open,high ,low ,close ,vol ,adjclose ) VALUES (?,?,?,?,?,?,?,?,?)", (self.keyFiller,i,row[0],row[1],row[2],row[3],row[4],row[5],row[6]))
                 else:
                     rowNumber += 1
+                    print("rowNumberElse: ",rowNumber)
               self.conn.commit()
 
               # print('SQL Table Updated')
@@ -52,17 +57,17 @@ class Csv2SQL():
               # for row in cursor3:
               #     print(row)
         roww = self.c.lastrowid
-        print(roww)
+        print("lastrow: ",roww)
 
     def printMessage(self,whichOne):
-        if whichOne == 'b':
+        if whichOne == 'c':
             print("SQL Table Created")
         else:
             print("SQL Table Updated")
         # self.c.execute(select count(*) from <stxTable1> where ..
 
 
-def start(symbols,createOrUpdate,ID_NameKey):
+def main(symbols,createOrUpdate,ID_NameKey):
     print(symbols)
     # chooseTable = input("Add to existing Table ('a') or create new Table ('c')?: ")
     a = Csv2SQL(symbols,ID_NameKey)
@@ -76,8 +81,10 @@ def start(symbols,createOrUpdate,ID_NameKey):
         start(symbols)
     d = a.printMessage(createOrUpdate)
 
-start(['SPY'], 'c',1)
-start(['GLD'], 'e',3)
-start(['TLH'], 'e',2)
-# start(['IEF'], 'e',2)
-start(['USO'], 'e',4)
+#Specify 'c' or 'e' for first item only. All others always 'e'
+if __name__ == '__main__': main(['SPY'], 'e',1)
+if __name__ == '__main__': main(['GLD'], 'e',3)
+if __name__ == '__main__': main(['TLH'], 'e',2)
+if __name__ == '__main__': main(['IEF'], 'e',2)
+if __name__ == '__main__': main(['USO'], 'e',4)
+
