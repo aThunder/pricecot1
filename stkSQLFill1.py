@@ -1,3 +1,13 @@
+# stkSQLFill.py
+
+'''
+    1. Takes CSV file (created in setStkCSVFile.py) and
+       creates and populates SQLite table
+    2. Adds self.ID_NameKey to CSV data for Join purposes
+    3. Allows for creating new table or updating existing table
+'''
+
+
 
 import sqlite3
 import csv

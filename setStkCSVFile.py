@@ -4,7 +4,12 @@
 
 """Very basic program with no prompts or GUI:
               1. Creates new CSV file or accesses existing file
-              2. counts # of rows in file
+                 for specified list of stock symbols and
+                 date ranges. (uses Yahoo Finance for data)
+              2. Also allows for choosing between updating existing CSV file
+                 or creating a new CSV file
+              3. Weekly data as of close Tuesday is used to sync witg COT data
+              4. counts # of rows in file
 """
 import pandas.io.data as pullData
 import datetime

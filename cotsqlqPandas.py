@@ -1,3 +1,11 @@
+# cotsqlqPandas.py
+
+'''
+    1. Queries 2 SQLite tablea and uses Join for results
+    2. Performs several calculations and summaries on results
+'''
+
+
 import sqlite3
 import pandas as pd
 import numpy as np

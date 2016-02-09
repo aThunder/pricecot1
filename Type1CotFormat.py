@@ -1,3 +1,11 @@
+#Type1CotFormat.py
+
+'''
+    1. Is called by controlCotUpdate.py to populate tables for specified commodities
+
+'''
+
+
 import json
 import urllib.request
 import sqlite3

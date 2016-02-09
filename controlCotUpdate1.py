@@ -1,7 +1,12 @@
 #controlCotUpdate.py
 
-'''prompts user to create new SQL table or use existing
-and then calls 3 other files to populate SQL table
+'''
+    1. prompts user to create new SQL table or use existing
+       for each specified COT commodity and
+       then calls Type1CotFormat.py or Type2CotFormat.py (depending on requirements)
+       to to populate SQL table
+    2. Which of the 2 files is called depends on the COT format for each specific commodity
+    3. Allows for creating new table or updating existing table
 '''
 
 import json
