@@ -25,9 +25,11 @@ class setCSVFile():
         self.start = start
         self.end = end
         self.timeSeries0 = pullData.DataReader(self.symbol, 'yahoo', self.start, self.end)
-        self.timeSeries0 = self.timeSeries0.asfreq('W-TUE')
 
 
+    def weekOrDay(self,freq):
+        # self.timeSeries0 = self.timeSeries0.asfreq('W-TUE')
+        self.timeSeries0 = self.timeSeries0.asfreq(freq)
 
         print("Entered stxSetFile1b.py to use existing file")
         #alternate way to retrieve data
@@ -57,7 +59,7 @@ class setCSVFile():
 
 #########################################################
 #########################################################
-def main(symbol,choice1a,startDate1,endDate1,actionSelected):
+def main(symbol,choice1a,freq,startDate1,endDate1,ID_NameKey,actionSelected):
     a = setCSVFile(symbol)
 
     if choice1a == 'e' :
@@ -71,16 +73,35 @@ def main(symbol,choice1a,startDate1,endDate1,actionSelected):
         # for i in symbol:
         #     print('iiii: ', i)
             a2 = a.accessSite(startDate1,endDate1)
-            csv1 = a.createCSV()
-
+            if freq != 'D':
+                a.weekOrDay(freq)
+                csv1 = a.createCSV()
+            else:
+                csv1 = a.createCSV()
 
     fileDays = a.countRows(csv1)
+    populateSQL = input('Populate SQL Table for {0}? '.format(symbol))
+    if populateSQL == 'y':
+        createOrExisting = input("Create new table('n') or update existing ('u')? ")
+        import stkSQLFill1
+        stkSQLFill1.main([symbol],createOrExisting,ID_NameKey,freq)
 
-startDate = '20151201'
+
+
+startDate = '20150101'
 endDate = '20160301'
 
-if __name__ == '__main__': main('spy', 'n',startDate,endDate,'actionSelected')
-if __name__ == '__main__': main('gld', 'n',startDate,endDate,'actionSelected')
-if __name__ == '__main__': main('tlh', 'n',startDate,endDate,'actionSelected')
-if __name__ == '__main__': main('ief', 'n',startDate,endDate,'actionSelected')
-if __name__ == '__main__': main('uso', 'n',startDate,endDate,'actionSelected')
+#Frequency options are 1)'D' 2)'W-TUE' (or whichever day of week preferred) 3)'M 4)'A'
+frequency = input('Enter Frequency: ').lower()
+# frequency = frequency.lower()
+if __name__ == '__main__': main('spy', 'n',frequency,startDate,endDate,1,'actionSelected')
+# if __name__ == '__main__': main('gld', 'n',frequency,startDate,endDate,3,'actionSelected')
+if __name__ == '__main__': main('tlh', 'n',frequency,startDate,endDate,2,'actionSelected')
+# # if __name__ == '__main__': main('ief',frequency,startDate,endDate,2,'actionSelected')
+# if __name__ == '__main__': main('uso', 'n',frequency,startDate,endDate,4,'actionSelected')
+
+# if __name__ == '__main__': main(['SPY'], 'c',1,frequency)
+# # if __name__ == '__main__': main(['GLD'], 'e',3,frequency)
+# # if __name__ == '__main__': main(['TLH'], 'e',2,frequency)
+# # if __name__ == '__main__': main(['IEF'], 'e',2,frequency)
+# # if __name__ == '__main__': main(['USO'], 'e',4,frequency)
