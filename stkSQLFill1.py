@@ -41,6 +41,9 @@ class Csv2SQL():
 
         print("TableName: ",self.tableName)
 
+    # def dailyExceptionCreateTableName(self):
+    #     self.tableName = 'SymbolsDataWeekly'
+
     def createTables(self):
 
         for i in self.symbol:
@@ -94,13 +97,16 @@ class Csv2SQL():
             print("SQL Table Updated")
         # self.c.execute(select count(*) from <stxTable1> where ..
 
-
+# main triggered by setStkCSVFile.py
 def main(symbols,createOrUpdate,ID_NameKey,frequency):
     print('XYZ: ',symbols,createOrUpdate,ID_NameKey,frequency)
     print(symbols)
     # chooseTable = input("Add to existing Table ('a') or create new Table ('c')?: ")
     a = Csv2SQL(symbols,ID_NameKey)
+
+    # if frequency != 'd':
     a.createTableName(frequency)
+
     if createOrUpdate== 'n':
         b = a.createTables()
         c= a.populateTables()
@@ -111,9 +117,10 @@ def main(symbols,createOrUpdate,ID_NameKey,frequency):
         # start(symbols)
     d = a.printMessage(createOrUpdate)
 
+
 #Specify 'c' or 'e' for first item only. All others always 'e'
-frequency = 'M'
-if __name__ == '__main__': main(['SPY'], 'c',1,frequency)
+frequency = 'd'.lower()
+if __name__ == '__main__': main(['SPY'], 'n',1,frequency)
 # if __name__ == '__main__': main(['GLD'], 'e',3,frequency)
 # if __name__ == '__main__': main(['TLH'], 'e',2,frequency)
 # if __name__ == '__main__': main(['IEF'], 'e',2,frequency)

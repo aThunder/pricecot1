@@ -73,14 +73,14 @@ def main(symbol,choice1a,freq,startDate1,endDate1,ID_NameKey,actionSelected):
         # for i in symbol:
         #     print('iiii: ', i)
             a2 = a.accessSite(startDate1,endDate1)
-            if freq != 'D':
+            if freq != 'd':
                 a.weekOrDay(freq)
                 csv1 = a.createCSV()
             else:
                 csv1 = a.createCSV()
 
     fileDays = a.countRows(csv1)
-    populateSQL = input('Populate SQL Table for {0}? '.format(symbol))
+    populateSQL = input('Populate SQL Table for {0}? '.format(symbol.upper()))
     if populateSQL == 'y':
         createOrExisting = input("Create new table('n') or update existing ('u')? ")
         import stkSQLFill1
@@ -93,15 +93,9 @@ endDate = '20160301'
 
 #Frequency options are 1)'D' 2)'W-TUE' (or whichever day of week preferred) 3)'M 4)'A'
 frequency = input('Enter Frequency: ').lower()
-# frequency = frequency.lower()
+
 if __name__ == '__main__': main('spy', 'n',frequency,startDate,endDate,1,'actionSelected')
 # if __name__ == '__main__': main('gld', 'n',frequency,startDate,endDate,3,'actionSelected')
-if __name__ == '__main__': main('tlh', 'n',frequency,startDate,endDate,2,'actionSelected')
-# # if __name__ == '__main__': main('ief',frequency,startDate,endDate,2,'actionSelected')
+# if __name__ == '__main__': main('tlh', 'n',frequency,startDate,endDate,2,'actionSelected')
+# # # if __name__ == '__main__': main('ief',frequency,startDate,endDate,2,'actionSelected')
 # if __name__ == '__main__': main('uso', 'n',frequency,startDate,endDate,4,'actionSelected')
-
-# if __name__ == '__main__': main(['SPY'], 'c',1,frequency)
-# # if __name__ == '__main__': main(['GLD'], 'e',3,frequency)
-# # if __name__ == '__main__': main(['TLH'], 'e',2,frequency)
-# # if __name__ == '__main__': main(['IEF'], 'e',2,frequency)
-# # if __name__ == '__main__': main(['USO'], 'e',4,frequency)
