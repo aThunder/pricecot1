@@ -23,7 +23,7 @@ class StkSpecs():
 
     def parseList(self):
         counter=0
-        completeList = []
+        self.completeList = []
         oneSymbol = ''
         # x =[i for i in self.list1]
         # print(x)
@@ -33,7 +33,7 @@ class StkSpecs():
             counter += 1
             # print("current: ",i,counter,len(self.list1))
             if (i == " " or i == ",") and check == True:
-                completeList.append(oneSymbol)
+                self.completeList.append(oneSymbol)
                 oneSymbol = ''
                 check = False
             elif (i == " " or i == ",") and check == False:
@@ -41,22 +41,29 @@ class StkSpecs():
             else:
                 oneSymbol += i
                 if counter == len(self.list1):
-                    completeList.append(oneSymbol)
+                    self.completeList.append(oneSymbol)
                 else:
                     check = True
 
-        print(completeList)
+        print(self.completeList)
 
     def promptForDates(self):
         self.start1 = input("Start Date (yyyymmdd): ")
         self.end1 = input("End Date (leave blank for latest date): ")
+
+    def createCSV(self):
+        import setStkCSVFile
+        for i in self.completeList:
+            setStkCSVFile.main(i,'n','d',self.start1,self.end1,99,'Action Selected')
 
 def main():
     ID_NameKey = 0
     a = StkSpecs(ID_NameKey)
     a.promptForList()
     a.parseList()
-    # a.promptForDates()
+    a.promptForDates()
+    a.createCSV()
+
 
 if __name__ == '__main__': main()
 
