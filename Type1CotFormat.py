@@ -15,7 +15,7 @@ class Type1():
     def __init__(self,url,ID_NameKey):
         self.url = url
         self.ID_NameKey = ID_NameKey
-        self.conn = sqlite3.connect('allCot.db')
+        self.conn = sqlite3.connect('allCotSymbols.db')
         self.c = self.conn.cursor()
 
     def getData(self):
