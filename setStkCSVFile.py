@@ -24,8 +24,15 @@ class setCSVFile():
         print('self.symbol: ', self.symbol)
         self.start = start
         self.end = end
-        self.timeSeries0 = pullData.DataReader(self.symbol, 'yahoo', self.start, self.end)
-
+        try:
+            self.timeSeries0 = pullData.DataReader(self.symbol, 'yahoo', self.start, self.end)
+        except:
+            print()
+            print("ERROR: {0} is not a valid symbol".format(self.symbol.upper()))
+            print()
+            placeFiller = input("Hit any key to continue")
+            badSymbol = 'NO'
+            return badSymbol
 
     def weekOrDay(self,freq):
         # self.timeSeries0 = self.timeSeries0.asfreq('W-TUE')
@@ -73,11 +80,14 @@ def main(symbol,choice1a,freq,startDate1,endDate1,ID_NameKey,actionSelected):
         # for i in symbol:
         #     print('iiii: ', i)
             a2 = a.accessSite(startDate1,endDate1)
-            if freq != 'd':
-                a.weekOrDay(freq)
-                csv1 = a.createCSV()
+            if a2 == 'NO':
+                return
             else:
-                csv1 = a.createCSV()
+                if freq != 'd':
+                    a.weekOrDay(freq)
+                    csv1 = a.createCSV()
+                else:
+                    csv1 = a.createCSV()
 
     fileDays = a.countRows(csv1)
     populateSQL = input('Populate SQL Table for {0}? '.format(symbol.upper()))
