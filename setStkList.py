@@ -18,7 +18,6 @@ class StkSpecs():
         self.list1 = []
         self.list2 = []
         self.list1 = input("Type List of Stocks (separated by spaces): ")
-        print(self.list1[1])
         print(self.list1)
 
     def parseList(self):
@@ -51,10 +50,18 @@ class StkSpecs():
         self.start1 = input("Start Date (yyyymmdd): ")
         self.end1 = input("End Date (leave blank for latest date): ")
 
+    ## 1. iterate through self.completeList OR
+    # def createCSV(self):
+    #     import setStkCSVFile
+    #     for i in self.completeList:
+    #         setStkCSVFile.main(i,'n','d',self.start1,self.end1,99,'Action Selected')
+
+    ## 2. Send self.complete to be iterated through by setStkCSVFile
     def createCSV(self):
         import setStkCSVFile
-        for i in self.completeList:
-            setStkCSVFile.main(i,'n','d',self.start1,self.end1,99,'Action Selected')
+        frequency = input('Enter Freq: ').lower()
+        setStkCSVFile.main(self.completeList,'n',frequency,'20160210',self.end1,99,'Action Selected')
+
 
 def main():
     ID_NameKey = 0

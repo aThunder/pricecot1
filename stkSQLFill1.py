@@ -74,7 +74,7 @@ class Csv2SQL():
                                  "open,high ,low ,close ,vol ,adjclose ) VALUES (?,?,?,?,?,?,?,?,?)".format(self.tableName),
                                  (self.ID_NameKey,i,row[0],row[1],row[2],row[3],row[4],row[5],row[6]))
 
-                  print("rowNumberIf: ",rowNumber)
+                  # print("rowNumberIf: ",rowNumber)
                   # self.c.execute("REPLACE INTO StxData2 (keynumber, symbol, date,open,high ,low ,close ,vol ,adjclose ) VALUES (?,?,?,?,?,?,?,?,?)", (self.keyFiller,i,row[0],row[1],row[2],row[3],row[4],row[5],row[6]))
                 else:
                     rowNumber += 1
@@ -107,7 +107,7 @@ def main(symbols,createOrUpdate,ID_NameKey,frequency):
     # if frequency != 'd':
     a.createTableName(frequency)
 
-    if createOrUpdate== 'n':
+    if createOrUpdate== 'newyesnew':
         b = a.createTables()
         c= a.populateTables()
     elif createOrUpdate == 'u':

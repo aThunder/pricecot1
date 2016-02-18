@@ -17,7 +17,8 @@ import time
 
 #############################################################
 class setCSVFile():
-    def __init__(self,symbol):
+    def __init__(self,symbolList,symbol):
+        self.symbolList = symbolList
         self.symbol = symbol
 
     def accessSite(self,start,end):
@@ -30,7 +31,7 @@ class setCSVFile():
             print()
             print("ERROR: {0} is not a valid symbol".format(self.symbol.upper()))
             print()
-            placeFiller = input("Hit any key to continue")
+            placeFiller = input("Hit Enter/Return to continue")
             badSymbol = 'NO'
             return badSymbol
 
@@ -45,6 +46,7 @@ class setCSVFile():
         # self.createCSV
 
     def createCSV(self):
+        print
         self.timeSeries0.to_csv('{0} ohlc.csv'.format(self.symbol))
         self.dataFile = pullData.read_csv('{0} ohlc.csv'.format(self.symbol), index_col='Date',parse_dates=True)
         return self.dataFile
@@ -64,47 +66,80 @@ class setCSVFile():
         print('days in the file:',self.dayCounter)
         return self.dayCounter
 
-#########################################################
-#########################################################
-def main(symbol,choice1a,freq,startDate1,endDate1,ID_NameKey,actionSelected):
-    a = setCSVFile(symbol)
+    def populateYorN(self,symbolList,ID_NameKey,freq):
+        print()
+        print('Populate SQL Table for: ')
+        # print('SS: ',self.symbol)
+        for i in self.symbolList:
+            print(i.upper())
+        populateSQL = input("Enter 'y' for yes or anything else for 'no': ")
 
-    if choice1a == 'e' :
-        # for i in symbol:
-        #     print('iiiiii: ',i)
-            csv1 = a.useCurrentCSV()
-            return csv1
-
-    if choice1a == 'n':
-            # checker = True
-        # for i in symbol:
-        #     print('iiii: ', i)
-            a2 = a.accessSite(startDate1,endDate1)
-            if a2 == 'NO':
-                return
+        if populateSQL == 'y':
+            createOrExisting = input("Create new table('newyesnew') or update existing ('u')? ")
+            if createOrExisting == 'newyesnew' or createOrExisting == 'u':
+                import stkSQLFill1
+                stkSQLFill1.main(self.symbolList,createOrExisting,ID_NameKey,freq)
             else:
-                if freq != 'd':
-                    a.weekOrDay(freq)
-                    csv1 = a.createCSV()
+                print()
+                print("'{0}' is an incorrect entry. Try again".format(createOrExisting))
+                print()
+                return False
+        else:
+            return
+
+#########################################################
+#########################################################
+def main(symbolList,choice1a,freq,startDate1,endDate1,ID_NameKey,actionSelected):
+    print("symbolList: ", symbolList)
+    print(symbolList,choice1a,freq,startDate1,endDate1,ID_NameKey,actionSelected)
+
+    for i in symbolList:
+        # a = setCSVFile(symbol)
+        a = setCSVFile(symbolList,i)
+
+        if choice1a == 'e' :
+                csv1 = a.useCurrentCSV()
+                return csv1
+
+        if choice1a == 'n':
+                # checker = True
+                a2 = a.accessSite(startDate1,endDate1)
+                if a2 == 'NO':
+                    return
                 else:
-                    csv1 = a.createCSV()
+                    if freq != 'd':
+                        a.weekOrDay(freq)
+                        csv1 = a.createCSV()
+                    else:
+                        csv1 = a.createCSV()
 
-    fileDays = a.countRows(csv1)
-    populateSQL = input('Populate SQL Table for {0}? '.format(symbol.upper()))
-    if populateSQL == 'y':
-        createOrExisting = input("Create new table('n') or update existing ('u')? ")
-        import stkSQLFill1
-        stkSQLFill1.main([symbol],createOrExisting,ID_NameKey,freq)
+        fileDays = a.countRows(csv1)
+
+    b = a.populateYorN(symbolList,ID_NameKey,freq)
+    print('b: ', b)
+    if b == False:
+        a.populateYorN(symbolList,ID_NameKey,freq)
+
+    # populateSQL = input('Populate SQL Table for {0}? '.format(.upper()))
+    # print('Populate SQL Table for: ')
+    # for i in symbol:
+    #     print(i.upper())
+    # populateSQL = input("Enter 'y' for yes or anything else for 'no': )
+    # if populateSQL == 'y':
+
+    #     createOrExisting = input("Create new table('newyesnew') or update existing ('u')? ")
+    #     import stkSQLFill1
+    #     stkSQLFill1.main(symbol,createOrExisting,ID_NameKey,freq)
 
 
+## Following is for standalone testing (instead of main() being called by setStkList.py)
+# startDate = '20150101'
+# endDate = '20160301'
 
-startDate = '20150101'
-endDate = '20160301'
+##Frequency options are 1)'D' 2)'W-TUE' (or whichever day of week preferred) 3)'M 4)'A'
+# frequency = input('Enter Frequencyyyyyy: ').lower()
 
-#Frequency options are 1)'D' 2)'W-TUE' (or whichever day of week preferred) 3)'M 4)'A'
-frequency = input('Enter Frequency: ').lower()
-
-if __name__ == '__main__': main('spy', 'n',frequency,startDate,endDate,1,'actionSelected')
+# if __name__ == '__main__': main('spy', 'n',frequency,startDate,endDate,1,'actionSelected')
 # if __name__ == '__main__': main('gld', 'n',frequency,startDate,endDate,3,'actionSelected')
 # if __name__ == '__main__': main('tlh', 'n',frequency,startDate,endDate,2,'actionSelected')
 # # # if __name__ == '__main__': main('ief',frequency,startDate,endDate,2,'actionSelected')
