@@ -16,7 +16,7 @@ import sqlite3
 class BuildCot():
 
     def __init__(self):
-        self.conn = sqlite3.connect('allCot.db')
+        self.conn = sqlite3.connect('allCotSymbols.db')
         self.c = self.conn.cursor()
 
     def createSQL(self):

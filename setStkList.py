@@ -12,13 +12,13 @@ class StkSpecs():
 
     def __init__(self,ID_NameKey):
         self.ID_NameKey = ID_NameKey
-        print("Let's begin")
+        # print("Entered setStkList")
 
     def promptForList(self):
         self.list1 = []
         self.list2 = []
         self.list1 = input("Type List of Stocks (separated by spaces): ")
-        print(self.list1)
+        # print(self.list1)
 
     def parseList(self):
         counter=0
@@ -30,7 +30,6 @@ class StkSpecs():
         check = False
         for i in self.list1:
             counter += 1
-            # print("current: ",i,counter,len(self.list1))
             if (i == " " or i == ",") and check == True:
                 self.completeList.append(oneSymbol)
                 oneSymbol = ''
@@ -47,8 +46,16 @@ class StkSpecs():
         print(self.completeList)
 
     def promptForDates(self):
+        print()
         self.start1 = input("Start Date (yyyymmdd): ")
+        print()
         self.end1 = input("End Date (leave blank for latest date): ")
+        print()
+
+    def returnInputs(self):
+        # print(self.completeList,self.start1,self.end1)
+        return self.completeList,self.start1,self.end1
+
 
     ## 1. iterate through self.completeList OR
     # def createCSV(self):
@@ -69,7 +76,10 @@ def main():
     a.promptForList()
     a.parseList()
     a.promptForDates()
-    a.createCSV()
+    # a.createCSV()
+    stkList1 = a.returnInputs()
+    # print("stkList1: ",stkList1)
+    return stkList1
 
 
 if __name__ == '__main__': main()

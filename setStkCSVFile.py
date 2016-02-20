@@ -17,21 +17,27 @@ import time
 
 #############################################################
 class setCSVFile():
-    def __init__(self,symbolList,symbol):
-        self.symbolList = symbolList
+    def __init__(self,symbol):
+        # self.symbolList = symbolList
         self.symbol = symbol
+        # self.validSymbols = []
+        # self.invalidSymbols = []
+
 
     def accessSite(self,start,end):
-        print('self.symbol: ', self.symbol)
+        # print('self.symbol: ', self.symbol)
         self.start = start
         self.end = end
         try:
             self.timeSeries0 = pullData.DataReader(self.symbol, 'yahoo', self.start, self.end)
+            print("***CSV file for {0} has just been created".format(self.symbol.upper()))
+            print()
         except:
             print()
-            print("ERROR: {0} is not a valid symbol".format(self.symbol.upper()))
+            print("***ERROR***: {0} is not a valid symbol".format(self.symbol.upper()))
             print()
             placeFiller = input("Hit Enter/Return to continue")
+            print()
             badSymbol = 'NO'
             return badSymbol
 
@@ -73,6 +79,7 @@ class setCSVFile():
         for i in self.symbolList:
             print(i.upper())
         populateSQL = input("Enter 'y' for yes or anything else for 'no': ")
+        print()
 
         if populateSQL == 'y':
             createOrExisting = input("Create new table('newyesnew') or update existing ('u')? ")
@@ -89,47 +96,44 @@ class setCSVFile():
 
 #########################################################
 #########################################################
-def main(symbolList,choice1a,freq,startDate1,endDate1,ID_NameKey,actionSelected):
-    print("symbolList: ", symbolList)
-    print(symbolList,choice1a,freq,startDate1,endDate1,ID_NameKey,actionSelected)
+def main(symbol,choice1a,freq,startDate1,endDate1,ID_NameKey,actionSelected):
+    # validSymbols = []
+    # invalidSymbols = []
+    valid = True
+    # print("symbolList: ", symbol)
+    # print(symbol,choice1a,freq,startDate1,endDate1,ID_NameKey,actionSelected)
 
-    for i in symbolList:
-        # a = setCSVFile(symbol)
-        a = setCSVFile(symbolList,i)
+    a = setCSVFile(symbol)
+    # a = setCSVFile(symbolList,i)
 
-        if choice1a == 'e' :
-                csv1 = a.useCurrentCSV()
-                return csv1
+    if choice1a == 'e' :
+            csv1 = a.useCurrentCSV()
+            # validSymbols.append(symbol)
+            # return csv1
 
-        if choice1a == 'n':
-                # checker = True
-                a2 = a.accessSite(startDate1,endDate1)
-                if a2 == 'NO':
-                    return
+    if choice1a == 'n':
+            # checker = True
+            a2 = a.accessSite(startDate1,endDate1)
+            if a2 == 'NO':
+                # print("SKIP & MOVE ON AS {0} IS NOT A VALID SYMBOL".format(symbol.upper()))
+                print()
+                # invalidSymbols.append(symbol)
+                toReturn = ['Dummy',False]
+                return toReturn
+            else:
+                if freq != 'd':
+                    a.weekOrDay(freq)
+                    csv1 = a.createCSV()
+                    # validSymbols.append(symbol)
                 else:
-                    if freq != 'd':
-                        a.weekOrDay(freq)
-                        csv1 = a.createCSV()
-                    else:
-                        csv1 = a.createCSV()
+                    csv1 = a.createCSV()
+                    # validSymbols.append(symbol)
 
-        fileDays = a.countRows(csv1)
-
-    b = a.populateYorN(symbolList,ID_NameKey,freq)
-    print('b: ', b)
-    if b == False:
-        a.populateYorN(symbolList,ID_NameKey,freq)
-
-    # populateSQL = input('Populate SQL Table for {0}? '.format(.upper()))
-    # print('Populate SQL Table for: ')
-    # for i in symbol:
-    #     print(i.upper())
-    # populateSQL = input("Enter 'y' for yes or anything else for 'no': )
-    # if populateSQL == 'y':
-
-    #     createOrExisting = input("Create new table('newyesnew') or update existing ('u')? ")
-    #     import stkSQLFill1
-    #     stkSQLFill1.main(symbol,createOrExisting,ID_NameKey,freq)
+    # fileDays = a.countRows(csv1)
+    # print("Valid: ",validSymbols)
+    # print("Invalid: ",invalidSymbols)
+    toReturn = [csv1,valid]
+    return toReturn
 
 
 ## Following is for standalone testing (instead of main() being called by setStkList.py)
