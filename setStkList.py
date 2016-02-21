@@ -17,6 +17,7 @@ class StkSpecs():
     def promptForList(self):
         self.list1 = []
         self.list2 = []
+        print()
         self.list1 = input("Type List of Stocks (separated by spaces): ")
         # print(self.list1)
 
@@ -52,9 +53,13 @@ class StkSpecs():
         self.end1 = input("End Date (leave blank for latest date): ")
         print()
 
+    def promptForFreq(self):
+        # print()
+        self.freq = input("Daily (d), Weekly (w-tue), Monthly (m), Annually (a): ")
+        print()
     def returnInputs(self):
         # print(self.completeList,self.start1,self.end1)
-        return self.completeList,self.start1,self.end1
+        return self.completeList,self.start1,self.end1,self.freq
 
 
     ## 1. iterate through self.completeList OR
@@ -76,6 +81,7 @@ def main():
     a.promptForList()
     a.parseList()
     a.promptForDates()
+    a.promptForFreq()
     # a.createCSV()
     stkList1 = a.returnInputs()
     # print("stkList1: ",stkList1)

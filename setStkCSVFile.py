@@ -45,7 +45,7 @@ class setCSVFile():
         # self.timeSeries0 = self.timeSeries0.asfreq('W-TUE')
         self.timeSeries0 = self.timeSeries0.asfreq(freq)
 
-        print("Entered stxSetFile1b.py to use existing file")
+        # print("Entered setStkCSVFile.py to use existing file")
         #alternate way to retrieve data
         #self.timeSeries0 = pd.io.data.get_data_yahoo(symbol, self.start, self.end)
         ##for SP500 in above line only use '%5EGSPC' as symbol

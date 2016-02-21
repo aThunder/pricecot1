@@ -27,16 +27,16 @@ class Csv2SQL():
         print("Frequency: ",self.frequency)
 
         if self.frequency =='d':
-            print('Daily')
+            # print('Daily')
             self.tableName = 'SymbolsDataDaily'
         if self.frequency == 'm':
-            print('Monthly')
+            # print('Monthly')
             self.tableName = 'SymbolsDataMonthly'
         if self.frequency == 'a':
-            print('Annual')
+            # print('Annual')
             self.tableName = 'SymbolsDataAnnual'
-        if self.frequency == 'w-tue':
-            print('Weekly-Tues')
+        if self.frequency == 'w-mon' or 'w-tue' or 'w-wed' or 'w-thu' or 'w-fri':
+            # print('Weekly-Tues')
             self.tableName = 'SymbolsDataWeekly'
 
         print("TableName: ",self.tableName)
@@ -48,8 +48,8 @@ class Csv2SQL():
 
         for i in self.symbol:
 
-            print(i)
-            print(self.tableName)
+            # print(i)
+            # print(self.tableName)
             self.c.execute("DROP TABLE IF EXISTS {0}".format(self.tableName))
 
             ### Following uses ID as only PRIMARY KEY in order to get ID to autoincrement
@@ -62,7 +62,7 @@ class Csv2SQL():
 
     def populateTables(self):
         for i in self.symbol:
-            print('asdfg: ',i)
+            # print('asdfg: ',i)
             rowNumber=0
             with open('{0} ohlc.csv'.format(i), newline='') as csvfile:
               reader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -79,7 +79,7 @@ class Csv2SQL():
                   # self.c.execute("REPLACE INTO StxData2 (keynumber, symbol, date,open,high ,low ,close ,vol ,adjclose ) VALUES (?,?,?,?,?,?,?,?,?)", (self.keyFiller,i,row[0],row[1],row[2],row[3],row[4],row[5],row[6]))
                 else:
                     rowNumber += 1
-                    print("rowNumberElse: ",rowNumber)
+                    # print("rowNumberElse: ",rowNumber)
               self.conn.commit()
 
               # print('SQL Table Updated')
@@ -93,15 +93,17 @@ class Csv2SQL():
 
     def printMessage(self,whichOne):
         if whichOne == 'c':
+            print()
             print("SQL Table Created")
         else:
+            print()
             print("SQL Table Updated")
         # self.c.execute(select count(*) from <stxTable1> where ..
 
 # main triggered by setStkCSVFile.py
 def main(symbols,createOrUpdate,ID_NameKey,frequency):
-    print('XYZ: ',symbols,createOrUpdate,ID_NameKey,frequency)
-    print(symbols)
+    # print('XYZ: ',symbols,createOrUpdate,ID_NameKey,frequency)
+    # print(symbols)
     # chooseTable = input("Add to existing Table ('a') or create new Table ('c')?: ")
     a = Csv2SQL(symbols,ID_NameKey)
 
